@@ -2,7 +2,10 @@
 
 ## 1. Motivation & Objective
 
- Detecting moving objects locally uses a low energy embedded system camera. Apply machine learning perception locally in embedded systems to recognize objects (human, pets etc). Send data to the server for more complex analysis (face detection, action analysis. Send notifications to a portable device (phone). Portable device should be able to control the embedded device or the host server. Functions include turn one the system, turn off system, low energy mode. 
+Detecting moving objects locally uses a low energy embedded system camera. Apply machine learning perception locally in embedded systems to recognize objects (human, pets etc). Send data to the server for more complex analysis (face detection, action analysis. Send notifications to a portable device (phone). Portable device should be able to control the embedded device or the host server. Functions include turn one the system, turn off system, low energy mode. 
+
+![arch](media/arch.png)
+
 
 ## 2. State of the Art & Its Limitations
 
