@@ -64,18 +64,41 @@ The exection plan is divided in to three main section.
 
 ## 9. Related Work
 
+
 ### 9.a. Papers
 
-List the key papers that you have identified relating to your project idea, and describe how they related to your project. Provide references (with full citation in the References section below).
+* Human detection in surveillance videos and its applications - a review <cite>[Manoranjan & Shah][1]</cite>
+
+Introduce multiple methods for human detection, provide comparison and implementation details for different models. This project  will include a model based on this paper use STM32 Microcontroller for human detection. 
+
+* Deeply learned face representations are sparse, selective, and robust <cite>[Yi & Xiaogang][2]</cite>
+
+Provide an accuracy model for robust face recognition. This model will be implemented on the central server.  
 
 ### 9.b. Datasets
 
-List datasets that you have identified and plan to use. Provide references (with full citation in the References section below).
+* Labelled Faces in the Wild Home (LFW)<cite>[Gary][3]</cite>
+
+* COCO Dataset <cite>[Tsung-Yi][4]</cite>
+
 
 ### 9.c. Software
 
-List softwate that you have identified and plan to use. Provide references (with full citation in the References section below).
+* Arm-gcc-none-eabi <cite>[5]</cite>
+* Tensorflow-lite <cite>[Gary][6]</cite>
 
 ## 10. References
 
-List references correspondign to citations in your text above. For papers please include full citation and URL. For datasets and software include name and URL.
+[1]  Paul, M., Haque, S.M.E. & Chakraborty, S. Human detection in surveillance videos and its applications - a review. EURASIP J. Adv. Signal Process. 2013, 176 (2013). https://doi.org/10.1186/1687-6180-2013-176
+
+[2] Yi Sun, Xiaogang Wang, Xiaoou Tang: “Deeply learned face representations are sparse, selective, and robust”, 2014;http://arxiv.org/abs/1412.1265 arXiv:1412.1265.
+
+[3]Gary B. Huang, Manu Ramesh, Tamara Berg, and Erik Learned-Miller.
+Labeled Faces in the Wild: A Database for Studying Face Recognition in Unconstrained Environments. University of Massachusetts, Amherst, Technical Report 07-49, October, 2007.
+
+[4] Tsung-Yi Lin, Michael Maire, Serge Belongie, Lubomir Bourdev, Ross Girshick, James Hays, Pietro Perona, Deva Ramanan, C. Lawrence Zitnick, Piotr Dollár: “Microsoft COCO: Common Objects in Context”, 2014; 
+
+[5] Arm-gcc-none-eabi [software],open-source suite of tools for C, C++ and assembly programming. 
+
+[6] Tensorlow-lite [software],Large-scale machine learning on heterogeneous systems,
+2015. Software available from tensorflow.org.
