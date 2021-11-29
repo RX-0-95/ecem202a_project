@@ -8,3 +8,5 @@ Use the folders as follows:
 * data/ for data data used in your project
 
 You may add additional folders as necessary.
+
+Add your project's code to this folder.
