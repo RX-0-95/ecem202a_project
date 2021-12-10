@@ -10,4 +10,4 @@ Use the folders as follows:
 
 You may add additional folders as necessary.
 
-Add your project's code to this folder.
+**Plase see the report in [docs/report.md](https://github.com/RX-0-95/ecem202a_project/blob/main/docs/report.md)**
