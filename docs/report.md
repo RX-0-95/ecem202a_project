@@ -1,6 +1,6 @@
-# Table of Contents
+# ECE200 Project -- Central Server Based Smart Camera System
 
-- [Table of Contents](#table-of-contents)
+- [ECE200 Project -- Central Server Based Smart Camera System](#ece200-project----central-server-based-smart-camera-system)
 - [Abstract](#abstract)
 - [1. Introduction](#1-introduction)
 - [2. Related Work](#2-related-work)
