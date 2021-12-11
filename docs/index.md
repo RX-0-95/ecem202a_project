@@ -13,5 +13,5 @@ This project discovered the feasibility and potential for a central server based
 
 * [Proposal](https://github.com/RX-0-95/ecem202a_project/blob/main/docs/proposal.md)
 * [Midterm Checkpoint Presentation Slides](https://drive.google.com/file/d/13vPOdrWIEbdKkYJzp15Q4d7FP_68Vn4n/view?usp=sharing)
-* [Final Presentation Slides](http://)
+* [Final Presentation Slides](https://docs.google.com/presentation/d/1pgtKPLpFbrri3FStLB12uFwTmaA0Dbs1Rm_6Q1KEPNU/edit?usp=sharing)
 * [Final Report](report)
