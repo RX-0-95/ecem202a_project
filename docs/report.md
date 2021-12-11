@@ -1,6 +1,6 @@
-# ECE200 Project -- Central Server Based Smart Camera System
+# ECE202 Project -- Central Server Based Smart Camera System
 
-- [ECE200 Project -- Central Server Based Smart Camera System](#ece200-project----central-server-based-smart-camera-system)
+- [ECE202 Project -- Central Server Based Smart Camera System](#ece202-project----central-server-based-smart-camera-system)
 - [Abstract](#abstract)
 - [1. Introduction](#1-introduction)
 - [2. Related Work](#2-related-work)
