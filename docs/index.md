@@ -11,6 +11,6 @@ The project aim to detecting moving objects locally uses a low energy embedded s
 # Required Submissions
 
 * [Proposal](https://github.com/RX-0-95/ecem202a_project/blob/main/docs/proposal.md)
-* [Midterm Checkpoint Presentation Slides](http://)
+* [Midterm Checkpoint Presentation Slides](https://drive.google.com/file/d/13vPOdrWIEbdKkYJzp15Q4d7FP_68Vn4n/view?usp=sharing)
 * [Final Presentation Slides](http://)
 * [Final Report](report)
