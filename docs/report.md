@@ -15,7 +15,7 @@
 # Abstract
 ![hardware](media/hardware.png)
 
-Provide a brief overview of the project objhectives, approach, and results.
+
 
 # 1. Introduction
 With the fast development of machine learning model compression and edge device AI framework, it is practical to deploy machine learning programmes to edge devices, more and more electronic devices are able to become smart devices. One of the most important areas is smart cameras. Smart cameras can be widely used in personal home security, warehouse security or factory assembly line monitoring. Currently, most of the smart cameras in the market use their onboard chip for AI computation. Although those smart cameras have fast WIFI connection and are able to connect to smartphones or computers, their entire computation is limited by their on board microcontroller.  Such design leads to several potential problems. First, most of those cameras can only run simple person detection neural networks due to the limited computational power and ram. Most of the high performance neural network requires hundreds of MB’s to store the model and fast GPU to inference the model which is unlikely to be available on smart camera due to the cost and physical size of the camera.  Second, it’s impractical to update such a smart camera because most of the time the camera module is good enough for many years, but new machine learning algorithms update fast, and would require more computational power in general. Updating such a smart camera for new AI performance would require replacing the entire module. 
@@ -26,27 +26,22 @@ The goal of this project is to design a central server based camera system but m
 
 Challenges of this project include design pipeline for the smart camera system, taks schedule inside the embedded system. How to make the camera transfer image to the central server while performing neural network inference and how to make the smart camera work tightly with the central server are important tasks in this project.The main hardware of this project includes two Raspberry Pi Pico, one is used for the smart camera system and another one is used as a programmer to program and debug the other Pico. One Arducam used to capture images and one MacBook and Raspberry Pi 3B+ used as a central server connected to Raspberry Pi Pico serial port via TTL USB adapter. One the software side, the entire program uses C and C++ with the GNU compiler.  The software build system is CMake, and uses FreeRTOS as the real time operating system. The program also uses neural networks in both the camera module and the central server. In the Pico, the neural network is implemented  using Tensorflow lite, in the central server, the neural network is implemented based on Pytorch. 
 
+The success of the project will be evaluated on the accuracy of the system's person detection. Also, the performance improvement of the system with the central server and RTOS in various ways. 
 
-
-
-
-This section should cover the following items:
-
-* Motivation & Objective: What are you trying to do and why? (plain English without jargon)
-* State of the Art & Its Limitations: How is it done today, and what are the limits of current practice?
-* Novelty & Rationale: What is new in your approach and why do you think it will be successful?
-* Potential Impact: If the project is successful, what difference will it make, both technically and broadly?
-* Challenges: What are the challenges and risks?
-* Requirements for Success: What skills and resources are necessary to perform the project?
-* Metrics of Success: What are metrics by which you would check for success?
 
 # 2. Related Work
+
+The edge AI has been a popular topic for the last few years and seems like it’s becoming an even more important topic in both research and application. Tensorflow is one of the most popular neural network frameworks, and it provides a lite version for  edge devices called Tensorflow lite (TFlite) <cite>[Tflite][1]</cite>. 
+
+Object detection is under fast iteration and improvement recently, most of the success methods rely on neural networks. There are light weight models like Mobilenet <cite>[Howard][2]</cite> that aim to reduce the size and inference time of the neural network model.  Relatively complex but powerful network YOLO <cite>[Redmon][3]</cite> is not only used to detect objects but also perform semantic segmentation.
+
+Although most microcontrollers do not support multi-threading like CPU, there's a real-time operating system (RTOS) that allows task concurrency inside the microcontroller. FreeRTOS is a widely used light weight RTOS that has low overhead <cite>[Tao][4]</cite> in task scheduling and good portability.
 
 # 3. Technical Approach
 ![hardware](media/cam_flowchart.jpg)
 Above graph shows the hardware and the working pipeline of the system. The Arducam and the Raspberry Pi pico can be treated as a smart camera system with limited built-in AI capability and the Raspberry Pi or the computer served as a central server in this project. The Arducam will capture the image in YUV422 format (YUVU) and transfer it to Pico through SPI interface. The Pico will perform motion detection and if it detects motion then persone detection using TFlite will be triggered. All those tasks are scheduled using the Real Time Operating System (RTOS) called FreeRTOS. The details of the implementation will be mentioned in the next section. 
 
-Although I only have one camera module available for this project, the system is actually optimized for **multi-camera** systems. Inspired by the FreeRTOS’s task priority system, I designed a dynamic priority queue system. The priority queue system will continuously update each camera’s priority based on the computational result inside the Pico and the result from the central server. The camera with higher priory will have their data process first in the central server. The implementation detail will be mentioned later in the priority queue system section.
+Although I only have one camera module available for this project, the system is actually optimized for **multi-camera** systems. Inspired by the FreeRTOS’s task priority system, I designed a dynamic priority system. The priority queue system will continuously update each camera’s priority based on the computational result inside the Pico and the result from the central server. The camera with higher priory will have their data process first in the central server. The implementation detail will be mentioned later in the priority system section.
 
 ## 3.1 Raspberry Pi Pico Arducam System
 The purpose of the Pico Arducam system is to first capture the image and transfer it to the central server. After the image is transferred, the Pico will perform motion detection. The implementation of the motion detection is simple yet efficient. A frame difference is computed after every new image captured, this is simply done by applying pixel-wise subtraction between current frame and previou frame. Then instead of applying complex operations like conturor find,I simply find the number of pixels with value above a certain preset threshold. If the number of those pixels are greater than 2 percent of the total pixels in the image, then consider that there is motion between two frames. The reason for such a simple design is because the motion detection will take place after every image capture, so it needs to be fast. In Fact the entire motion detection only takes 2ms in the Pico. 
@@ -64,7 +59,7 @@ As a result the host server now refreshes at 3.1 FPS instead of lower than one c
 ## 3.2 Dynamic Priority System
 Imagine that the smart cameras are used in the warehouse, there are more than 20 of those cameras that keep sending images to the central server and the server needs to process them in real-time. In this project one of the central servers I use is my Macbook pro with Intel's i5 chip. I’m running YOLOV3 on Pytorch with low resolution 128, and it tooks 0.3 second to process one image. It will take 6 second to process one frame from those 20 cameras. Of course, in real applications, we can use GPU and process multiple images in a batch, but my point here is that the central server could have large pressure when running a complex neural network when multiple cameras connect to it. Multiple camera systems are very common nowadays even in home security systems.
 
-If there are multiple cameras connected to the central server, to satisfy all the computation needs, one choice is to make the central server power enough to handle all cameras’ needs. However, such design leads to better hardware in the central server or higher cost for cloud servers. To address this problem I developed a priority queue system. The priority queue system is inspired from the FreeRTOS’s priority task scheduler. The central server will first process images for the camera with higher priority. Below I will introduce how the camra’s priority is classified and decided. 
+If there are multiple cameras connected to the central server, to satisfy all the computation needs, one choice is to make the central server power enough to handle all cameras’ needs. However, such design leads to better hardware in the central server or higher cost for cloud servers. To address this problem I developed a dynamic priority system. The priority system is inspired from the FreeRTOS’s priority task scheduler. The central server will first process images for the camera with higher priority. Below I will introduce how the camra’s priority is classified and decided. 
 
 The camera has 3 priority, the default and the lowest priority is 1. All cameras start with priority 1, if the Pico detects motion, then the camera’s priority changes to 2. If the Pico detects the person, then the camera priority will increase to 3. Each time Pico changes the priority of the camera, it will transmit this information to the host server, so the host server is aware of the priority of the camera. Due to the relatively low accuracy of the Pico system, the Pico can only increase the camera’s priority, not decrease. The central server will process the camera with higher priority, if the host detects the person in the camera’s image, then the camera’s priority increases to 3 if not already. If there’s no person to detect for 1 second, then the camera’s priority decreases to 1. So the host server can both increase and decrease the priority of the camera. Also, to prevent that one camera is not being processed by the central server for a long time due to other cameras’ high priority, if a camera has not been processed for 3 seconds, the central server will increase it’s priority by 1 level.
 
@@ -91,10 +86,39 @@ Second I test the person to detect accuracy on the camera system with and withou
 
 I tested on a 16 mins video, recorded both the person detection result from the Pico board and the result from the central server. I compare them with the ground truth and the result is shown in the table below. 
 
+![result](media/person_detection_result.png)
+
+From the result we can see that the accuracy of person detection increases significantly with the help of the central server. Also with the central server, the system is able to handle harder tasks. In this project, the central server uses YOLOV3 to perform semantic segmentation.  
+
+
+![yolov3](media/YOLOV3.png)
 
 
 
 # 5. Discussion and Conclusions
 
+This project aims to build a smart camera system with edge AI for lightweight tasks and central server/hub for heavy duty neural networks. The introduction of FreeRTOS ensures the image transfer rate from the camera model to the central hub. With the help of a central server, the smart camera system is able to efficiently detect people on the 16 mins test video with 91% precision. Lightweight tasks in smart cameras include motion detection and simple person detection.  Those lightweight tasks adjust the camera’s priority in the central server, give instructions to the central server which camera’s data needs to process first.  This design increases the reliability and efficiency of the smart camera system, allowing the central server to better allocate its resources under high pressure. This system can be easily extended to various tasks such as facial recognition and person action prediction as long as the central server supports those tasks. Commercial products with this design will be easy to upgrade, since the central server can be easy to update, and usually the camera module does not need to update frequently.  Especially, if the central server is a Web server like AWS, it is even more convenient to update. 
+
+The weak point of such design is first the potential security issue. Since all the captured images are transferred to the central server, it is possible that those data leak during the transfer. The possible solution is to simply apply encryption, use OpenSSL during data transfer, and decrypt the data on the central server. Another weak point is that the cost of the system may be higher if there’s only one camera in the system, however, in the case when multiple cameras are needed such as home security system and warehouse security, the cost of the central server can be spreaded. Overall, with the development of cloud server I think this is the future of the smart camera system. 
+
 
 # 6. References
+[1].  Martín Abadi, Ashish Agarwal, Paul Barham, Eugene Brevdo,
+Zhifeng Chen, Craig Citro, Greg S. Corrado, Andy Davis,
+Jeffrey Dean, Matthieu Devin, Sanjay Ghemawat, Ian Goodfellow,
+Andrew Harp, Geoffrey Irving, Michael Isard, Rafal Jozefowicz, Yangqing Jia,
+Lukasz Kaiser, Manjunath Kudlur, Josh Levenberg, Dan Mané, Mike Schuster,
+Rajat Monga, Sherry Moore, Derek Murray, Chris Olah, Jonathon Shlens,
+Benoit Steiner, Ilya Sutskever, Kunal Talwar, Paul Tucker,
+Vincent Vanhoucke, Vijay Vasudevan, Fernanda Viégas,
+Oriol Vinyals, Pete Warden, Martin Wattenberg, Martin Wicke,
+Yuan Yu, and Xiaoqiang Zheng.
+TensorFlow: Large-scale machine learning on heterogeneous systems,
+2015. Software available from tensorflow.org.
+
+[2]. A. G. Howard, M. Zhu, B. Chen, D. Kalenichenko, W. Wang,T. Weyand, M. Andreetto, and H. Adam.   Mobilenets:  Effi-cient convolutional neural networks for mobile vision appli-cations.CoRR, abs/1704.04861, 2017
+
+[3]J. Redmon, S. Divvala, R. Girshick and A. Farhadi, "You Only Look Once: Unified, Real-Time Object Detection," 2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2016, pp. 779-788, doi: 10.1109/CVPR.2016.91.
+
+[4] X,Tao Performance benchmarking of
+FreeRTOS and its Hardware Abstraction.Technische Universiteit Eindhoven. 11. 2008 
