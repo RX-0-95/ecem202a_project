@@ -1,6 +1,7 @@
 # Abstract
 
-The project aim to detecting moving objects locally uses a low energy embedded system camera. Apply machine learning perception locally in embedded systems to recognize objects (human, pets etc). Send data to the server for more complex analysis (face detection, action analysis. Send notifications to a portable device (phone). Portable device should be able to control the embedded device or the host server. Functions include turn one the system, turn off system, low energy mode. 
+This project discovered the feasibility and potential for a central server based smart camera system. The smart camera module alone is able to perform light weight tasks including motion detection and simple person detection using a neural network. The central server running on a PC or Raspberry Pi is able to handle heavy duty tasks such as more advanced and accurate person detection and semantic segmentation, as well as render the GUI. Tasks inside the  smart camera are scheduled to use FreeRTOS, this ensures that the central server will have stable image input while the smart camera performs person detection. The motion detection and person detection result calculated in edge AI devices is transferred to the central server, those results act as a guidance for camera priority. Central serval will first process the camera data with higher priority. This design ensures that the central server will be optimally efficient when multiple cameras connect to it. The system is tested on a 16 mins video and achieve 91% precision on person with the help of the central server. 
+![hardware](media/hardware.png)
 
 
 # Team
