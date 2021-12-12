@@ -1,3 +1,7 @@
 [submodule "software"]
 	path = software
 	url = https://github.com/RX-0-95/cam_project.git
+[submodule "software2/cam_project"]
+	path = software2/cam_project
+	url = https://github.com/RX-0-95/cam_project.git
+	branch = master
