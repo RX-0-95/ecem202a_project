@@ -64,15 +64,17 @@ If there are multiple cameras connected to the central server, to satisfy all th
 
 The camera has 3 priority, the default and the lowest priority is 1. All cameras start with priority 1, if the Pico detects motion, then the camera’s priority changes to 2. If the Pico detects the person, then the camera priority will increase to 3. Each time Pico changes the priority of the camera, it will transmit this information to the host server, so the host server is aware of the priority of the camera. Due to the relatively low accuracy of the Pico system, the Pico can only increase the camera’s priority, not decrease. The central server will process the camera with higher priority, if the host detects the person in the camera’s image, then the camera’s priority increases to 3 if not already. If there’s no person to detect for 1 second, then the camera’s priority decreases to 1. So the host server can both increase and decrease the priority of the camera. Also, to prevent that one camera is not being processed by the central server for a long time due to other cameras’ high priority, if a camera has not been processed for 3 seconds, the central server will increase it’s priority by 1 level.
 
+![dynamic_queue](media/dynamic_priority.jpg)
+
 ## 3.3 Central Server
 
-In this project the central server’s job is to run a more advanced person detection neural network, here I choose YOLOV3. Other tasks of the central server are to receive data from the camera and adjust the camera’s priority accordingly, the detailed implementation is explained early in the priority queue system. The central server does provide GUI written in PyQT and the neural network is implemented using Pytorch(citation) and uses a pre-trained model . Below is the screenshot of the GUI of the central server.
+In this project the central server’s job is to run a more advanced person detection neural network, here I choose YOLOV3. Other tasks of the central server are to receive data from the camera and adjust the camera’s priority accordingly, the detailed implementation is explained early in the priority queue system. The central server does provide GUI written in PyQT and the neural network is implemented using Pytorch and uses a pre-trained model . Below is the screenshot of the GUI of the central server.
 
 ![GUI](media/GUI.png)
 
 # 4. Evaluation and Results
 
-The smart camera system is evaluated in multiple ways with different baseline. Include video refresh rate, person detection accuracy and person detection accuracy under multiple camera simulation. The way I test the camera system is to play a surveillance video in front of the camera and use the central server to record the test data. surveillance videos are from the VIRAT [citation] dataset which is a video dataset of surveillance domain. 
+The smart camera system is evaluated in multiple ways with different baseline. Include video refresh rate, person detection accuracy. The way I test the camera system is to play a surveillance video in front of the camera and use the central server to record the test data. surveillance videos are from the VIRAT <cite>[Oh][5]</cite>  dataset which is a video dataset of surveillance domain. 
 
 ![video_test](media/video_test.png)
 
@@ -123,3 +125,4 @@ TensorFlow: Large-scale machine learning on heterogeneous systems,
 
 [4] X,Tao Performance benchmarking of
 FreeRTOS and its Hardware Abstraction.Technische Universiteit Eindhoven. 11. 2008 
+[5]S. Oh et al., "A large-scale benchmark dataset for event recognition in surveillance video," CVPR 2011, 2011, pp. 3153-3160, doi: 10.1109/CVPR.2011.5995586.
